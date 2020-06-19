@@ -1,17 +1,13 @@
-import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Google Maps Demo',
+      debugShowCheckedModeBanner: false,
       home: MapSample(),
     );
   }
@@ -29,25 +25,18 @@ class MapSampleState extends State<MapSample> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _setMarkerIcon();
   }
 
   void _setMarkerIcon() async {
-     Uint8List markerIcon = await getBytesFromAsset('assets/icons/drink.png', 100);
+     _markerIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 5), 'assets/icons/wedding.png');
+  }
 
-    _markerIcon = BitmapDescriptor.fromBytes(markerIcon);
-  }
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
-  }
   void _onMapCreated(GoogleMapController controller){
     _googleMapController = controller;
     setState(() {
+      print('add marker');
       _markers.add(Marker(
         markerId: MarkerId("0"),
         position: LatLng(46.606143, 13.845198),
@@ -55,12 +44,20 @@ class MapSampleState extends State<MapSample> {
           title: "Judls home",
           snippet: "really cool"
         ),
-
         icon: _markerIcon
       ));
     });
+    _setGoogleMapStyle();
   }
 
+  void _setGoogleMapStyle() async{
+    try {
+      String style = await DefaultAssetBundle.of(context).loadString('lib/Styling/google_map_style.json');
+      _googleMapController.setMapStyle(style);
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -72,6 +69,7 @@ class MapSampleState extends State<MapSample> {
         onMapCreated: _onMapCreated,
         markers: _markers,
         myLocationEnabled: true,
+        myLocationButtonEnabled: false,
       ),
 
     );

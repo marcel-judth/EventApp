@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../shapes/point.dart';
 import '../Styling/size_config.dart';
@@ -17,7 +16,6 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    DateTime date = DateTime.now();
     return Scaffold(
       body: Container(
         width: double.infinity,
