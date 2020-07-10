@@ -1,8 +1,8 @@
 import 'dart:collection';
-
 import 'package:eventapp/model/event.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class MapPage extends StatelessWidget {
   @override
@@ -24,6 +24,7 @@ class MapSampleState extends State<MapSample> {
   Set<Marker> _markers = HashSet<Marker>();
   BitmapDescriptor _markerIcon;
   List<Event> _allEvents = List<Event>();
+  Location _curLocation = Location();
 
   @override
   void initState() {
@@ -40,6 +41,12 @@ class MapSampleState extends State<MapSample> {
   void _onMapCreated(GoogleMapController controller) {
     _googleMapController = controller;
     setState(() {
+      print('hello');
+      //print('myLocation: ${_curLocation.getLocation()}');
+      _curLocation.onLocationChanged.listen((loc){
+        //print('Hello from location: $loc');
+        _googleMapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(loc.latitude, loc.longitude), zoom: 15)));
+      });
       _loadEvents();
       _markers.add(Marker(
           markerId: MarkerId("0"),
@@ -79,7 +86,6 @@ class MapSampleState extends State<MapSample> {
           onMapCreated: _onMapCreated,
           markers: _markers,
           myLocationEnabled: true,
-          myLocationButtonEnabled: false,
         ),
         Padding(
           padding: EdgeInsets.all(20.0),
@@ -93,7 +99,6 @@ class MapSampleState extends State<MapSample> {
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     makeEvent(_allEvents[0]),
-                    
                   ],
                 ),
               )
@@ -170,6 +175,16 @@ class MapSampleState extends State<MapSample> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
+                  Icon(
+                    Icons.star_border,
+                    color: Colors.yellow[700],
+                    size: 30,
+                  ),
+                  Icon(
+                    Icons.star_border,
+                    color: Colors.yellow[700],
+                    size: 30,
+                  ),
                   Icon(
                     Icons.star_border,
                     color: Colors.yellow[700],
