@@ -5,7 +5,7 @@ import '../Styling/size_config.dart';
 import '../Styling/styles.dart';
 
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget{
 
   //ToDo: textfiels;
   //ToDo adjust size of the objects

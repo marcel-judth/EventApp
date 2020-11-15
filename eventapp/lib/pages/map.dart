@@ -1,10 +1,11 @@
 import 'dart:collection';
 import 'package:eventapp/model/event.dart';
+import 'package:eventapp/pages/sidebar/navigation_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-class MapPage extends StatelessWidget {
+class MapPage extends StatelessWidget with NavigationStates{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,7 +42,6 @@ class MapSampleState extends State<MapSample> {
   void _onMapCreated(GoogleMapController controller) {
     _googleMapController = controller;
     setState(() {
-      print('hello');
       //print('myLocation: ${_curLocation.getLocation()}');
       _curLocation.onLocationChanged.listen((loc){
         //print('Hello from location: $loc');
@@ -51,7 +51,7 @@ class MapSampleState extends State<MapSample> {
       _markers.add(Marker(
           markerId: MarkerId("0"),
           position: LatLng(46.606143, 13.845198),
-          infoWindow: InfoWindow(title: "Judls home", snippet: "really cool"),
+          infoWindow: InfoWindow(),
           icon: _markerIcon));
     });
     _setGoogleMapStyle();

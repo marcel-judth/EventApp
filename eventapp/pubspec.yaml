@@ -31,7 +31,9 @@ dependencies:
   intl: ^0.16.1
   google_maps_flutter: ^0.5.28+1
   location: ^3.0.0
-
+  rxdart: ^0.24.1
+  flutter_bloc: ^5.0.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
